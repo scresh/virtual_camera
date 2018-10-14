@@ -1,5 +1,5 @@
 import cv2
-from geometry import Canvas, Figure
+from geometry import Canvas, Figure, rotate
 
 
 def main():
@@ -25,6 +25,10 @@ def main():
         )
     )
 
+    ang_x = 0
+    ang_y = 0
+    ang_z = 0
+
     cam_x = 256
     cam_y = 256
     cam_z = 256
@@ -32,30 +36,55 @@ def main():
     focal_length = 256
 
     canvas = Canvas()
-    # canvas.add_figure(axes)
+    canvas.add_figure(axes)
     canvas.add_figure(tetrahedron)
     canvas.add_figure(cube)
 
     while True:
-        cv2.imshow('image', canvas.get_image(cam_x, cam_y, cam_z, focal_length))
-
+        cv2.imshow('image', canvas.get_image(cam_x, cam_y, cam_z, ang_x, ang_y, ang_z, focal_length))
         k = cv2.waitKey(0)
-        if k == ord('6'):
-            cam_x += 2
-        elif k == ord('4'):
-            cam_x -= 2
-        elif k == ord('8'):
-            cam_y += 2
-        elif k == ord('2'):
-            cam_y -= 2
+
+        # Shift matrix
+        p = [0.0, 0.0, 0.0]
+
+        # Translation
+        if k == 83:
+            p = [2.0, 0.0, 0.0]
+        elif k == 81:
+            p = [-2.0, 0.0, 0.0]
+        elif k == 82:
+            p = [0.0, 2.0, 0.0]
+        elif k == 84:
+            p = [0.0, -2.0, 0.0]
         elif k == ord('-'):
-            cam_z += 2
+            p = [0.0, 0.0, 2.0]
         elif k == ord('+'):
-            cam_z -= 2
+            p = [0.0, 0.0, -2.0]
+
+        # Rotation
+        elif k == ord('8'):
+            ang_x += 2
+        elif k == ord('2'):
+            ang_x -= 2
+        elif k == ord('4'):
+            ang_y += 2
+        elif k == ord('6'):
+            ang_y -= 2
+        elif k == ord('7'):
+            ang_z += 2
+        elif k == ord('9'):
+            ang_z -= 2
+
+        # Focal length size
         elif k == ord('['):
             focal_length *= 1.1
         elif k == ord(']'):
             focal_length /= 1.1
+
+        r = rotate(p, ang_x, ang_y, ang_z)
+        cam_x = int(round(cam_x + r[0]))
+        cam_y = int(round(cam_y + r[1]))
+        cam_z = int(round(cam_z + r[2]))
 
 
 if __name__ == '__main__':
