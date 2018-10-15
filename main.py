@@ -3,25 +3,47 @@ from geometry import Canvas, Figure, rotate
 
 
 def main():
-    axes = Figure(
-        points={'O': (0, 0, 0), 'X': (512, 0, 0), 'Y': (0, 512, 0), 'Z': (0, 0, 512)},
-        pairs=(('O', 'X'), ('O', 'Y'), ('O', 'Z')),
+    figure_1 = Figure(
+        points={
+            'A': (0, 0, 0), 'B': (0, 0, 128), 'C': (128, 0, 128), 'D': (128, 0, 0),
+            'E': (0, 384, 0), 'F': (0, 384, 128), 'G': (128, 384, 128), 'H': (128, 384, 0),
+
+        },
+        pairs=(
+            ('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'A'),
+            ('E', 'F'), ('F', 'G'), ('G', 'H'), ('H', 'E'),
+            ('A', 'E'), ('B', 'F'), ('C', 'G'), ('D', 'H'),
+        )
     )
 
-    tetrahedron = Figure(
-        points={'A1': (0, 0, 222), 'B1': (128, 0, 222), 'C1': (64, 0, 112), 'D1': (64, 104, 184)},
+    figure_2 = Figure(
+        points={
+            'A': (0, 0, 256), 'B': (0, 0, 384), 'C': (128, 0, 384), 'D': (128, 0, 256),
+            'E': (0, 128, 256), 'F': (0, 128, 384), 'G': (128, 128, 384), 'H': (128, 128, 256),
+
+        },
+        pairs=(
+            ('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'A'),
+            ('E', 'F'), ('F', 'G'), ('G', 'H'), ('H', 'E'),
+            ('A', 'E'), ('B', 'F'), ('C', 'G'), ('D', 'H'),
+        )
+    )
+
+    figure_3 = Figure(
+        points={'A1': (256, 0, 0), 'B1': (256, 0, 128), 'C1': (367, 0, 64), 'D1': (293, 104, 64)},
         pairs=(('A1', 'B1'), ('B1', 'C1'), ('C1', 'A1'), ('A1', 'D1'), ('B1', 'D1'), ('C1', 'D1')),
     )
 
-    cube = Figure(
+    figure_4 = Figure(
         points={
-            'A1': (0, 0, 0), 'B1': (0, 0, 128), 'C1': (128, 0, 128), 'D1': (128, 0, 0),
-            'E1': (0, 128, 0), 'F1': (0, 128, 128), 'G1': (128, 128, 128), 'H1': (128, 128, 0),
+            'A': (256, 0, 256), 'B': (256, 0, 512), 'C': (512, 0, 512), 'D': (512, 0, 256),
+            'E': (256, 256, 256), 'F': (256, 256, 512), 'G': (512, 256, 512), 'H': (512, 256, 256),
+
         },
         pairs=(
-            ('A1', 'B1'), ('B1', 'C1'), ('C1', 'D1'), ('D1', 'A1'),
-            ('E1', 'F1'), ('F1', 'G1'), ('G1', 'H1'), ('H1', 'E1'),
-            ('A1', 'E1'), ('B1', 'F1'), ('C1', 'G1'), ('D1', 'H1'),
+            ('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'A'),
+            ('E', 'F'), ('F', 'G'), ('G', 'H'), ('H', 'E'),
+            ('A', 'E'), ('B', 'F'), ('C', 'G'), ('D', 'H'),
         )
     )
 
@@ -29,16 +51,18 @@ def main():
     ang_y = 0
     ang_z = 0
 
-    cam_x = 256
+    cam_x = 192
     cam_y = 256
-    cam_z = 256
+    cam_z = 1024
 
-    focal_length = 256
+    focal_length = 128
 
     canvas = Canvas()
-    canvas.add_figure(axes)
-    canvas.add_figure(tetrahedron)
-    canvas.add_figure(cube)
+    canvas.add_figure(figure_1)
+    canvas.add_figure(figure_2)
+    canvas.add_figure(figure_3)
+    canvas.add_figure(figure_4)
+
 
     while True:
         cv2.imshow('image', canvas.get_image(cam_x, cam_y, cam_z, ang_x, ang_y, ang_z, focal_length))
@@ -49,17 +73,17 @@ def main():
 
         # Translation
         if k == 83:
-            p = [2.0, 0.0, 0.0]
+            p = [8.0, 0.0, 0.0]
         elif k == 81:
-            p = [-2.0, 0.0, 0.0]
+            p = [-8.0, 0.0, 0.0]
         elif k == 82:
-            p = [0.0, 2.0, 0.0]
+            p = [0.0, 8.0, 0.0]
         elif k == 84:
-            p = [0.0, -2.0, 0.0]
+            p = [0.0, -8.0, 0.0]
         elif k == ord('-'):
-            p = [0.0, 0.0, 2.0]
+            p = [0.0, 0.0, 8.0]
         elif k == ord('+'):
-            p = [0.0, 0.0, -2.0]
+            p = [0.0, 0.0, -8.0]
 
         # Rotation
         elif k == ord('8'):
