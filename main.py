@@ -47,22 +47,21 @@ def main():
         )
     )
 
-    ang_x = 0
-    ang_y = 0
+    ang_x = -45
+    ang_y = 45
     ang_z = 0
 
-    cam_x = 192
-    cam_y = 256
+    cam_x = 1024
+    cam_y = 1024
     cam_z = 1024
 
-    focal_length = 128
+    focal_length = 512
 
     canvas = Canvas()
     canvas.add_figure(figure_1)
     canvas.add_figure(figure_2)
     canvas.add_figure(figure_3)
     canvas.add_figure(figure_4)
-
 
     while True:
         cv2.imshow('image', canvas.get_image(cam_x, cam_y, cam_z, ang_x, ang_y, ang_z, focal_length))
